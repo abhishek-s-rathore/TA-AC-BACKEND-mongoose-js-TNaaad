@@ -26,7 +26,7 @@ Each comment can have fields:-
 Each user can have fields:-
 
 - name
-- email
+- emailcd ..
 - age
 
 - Design all the schemas and their associated models and export it.

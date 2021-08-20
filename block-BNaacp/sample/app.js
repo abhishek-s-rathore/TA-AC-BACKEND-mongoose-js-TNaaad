@@ -31,12 +31,59 @@ app.use(express.static(__dirname + '/assets'));
 // Routes
 app.post('/users', (req, res, next) => {
   var data = req.body;
-  console.log(data);
-  User.insert(data, { new: true }, (err, user) => {
-    next(err);
+  User.create(data, (err, user) => {
+    if (err) return next(err);
     res.json(user);
   });
 });
+
+app.get('/users', (req, res, next) => {
+  User.find({}, (err, users) => {
+    if (err) return next(err);
+    res.json({ users: users });
+  });
+});
+
+// app.get('/users/:id', (req, res, next) => {
+//   var id = req.params.id;
+//   User.findById(id, (err, users) => {
+//     if (err) return next(err);
+//     res.json({ users: users });
+//   });
+// });
+
+// app.get('/users/:id', (req, res, next) => {
+//   var id = req.params.id;
+//   User.find({ _id: id }, (err, users) => {
+//     if (err) return next(err);
+//     res.json({ users: users });
+//   });
+// });
+
+app.get('/users/:id', (req, res, next) => {
+  var id = req.params.id;
+  User.findOne({ _id: id }, (err, users) => {
+    if (err) return next(err);
+    res.json({ users: users });
+  });
+});
+
+app.put('/users/:id', (req, res, next) => {
+  var data = req.body;
+  var id = req.params.id;
+  User.findByIdAndUpdate(id, data, {new:true},(err, updatedUser) => {
+    if (err) return next(err);
+    res.json(updatedUser);
+  });
+});
+
+app.delete('/users/:id', (req, res, next) => {
+    var id = req.params.id;
+    User.findByIdAndDelete(id,(err, deletedUser) => {
+      if (err) return next(err);
+      res.send(`${deletedUser.name} is deleted.`);
+    });
+  });
 
 // Error Handlers
 // 1. 404
@@ -50,6 +97,6 @@ app.use((err, req, res, next) => {
 });
 
 // Connecting App To Server
-app.listen(5510, 'localhost', () => {
-  console.log(`Server connected to post 5510`);
+app.listen(5555, 'localhost', () => {
+  console.log(`Server connected to post 5555`);
 });
